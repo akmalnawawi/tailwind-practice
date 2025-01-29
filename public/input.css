@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --width-110: 28rem;
+  --width-120: 30rem;
+  --width-128: 32rem;
+  --width-160: 40rem;
+  --width-192: 48rem;
+  --width-224: 56rem;
+  --width-256: 64rem;
+
+  --color-dark-azure-500: #007dbc;
+  --color-dark-azure-900: #0d295c;
+  --color-gray-azure-100: #eff2f5;
+  --color-gray-azure-300: #dfe3e6;
+  --color-white-cold-500: #f9fafb;
+  --color-white-warm-500: #fafafa;
+  --color-dark-cyan-600: #008eb2;
+
+
+  --color-neon-red-500:#ed184b;
+  --color-neon-red-400:#f2535c;
+  --color-neon-red-300:#f78e6f;
+}
+
+/*
+    The default border color has changed to `currentColor` in Tailwind CSS v4,
+    so we've added these compatibility styles to make sure everything still
+    looks the same as it did with Tailwind CSS v3.
+  
+    If we ever want to remove these styles, we need to add an explicit border
+    color utility to any element that depends on these defaults.
+  */
+@layer base {
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility nav {
+  @apply relative font-bold tracking-[1px];
+
+  &::after {
+    @apply content-[''] bg-gray-500 h-[5px] w-full opacity-0 left-0 -bottom-0 absolute transition-all duration-300;
+  }
+
+  &:hover::after {
+    @apply opacity-100;
+  }
+}
+
+@layer base {
+  * {
+    @apply m-0 p-0 box-border;
+  }
+
+  *::before,
+  *::after {
+    @apply box-border;
+  }
+}
