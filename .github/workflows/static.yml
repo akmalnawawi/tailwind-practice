@@ -1,0 +1,55 @@
+# Simple workflow for deploying Tailwind CSS static content to GitHub Pages
+name: Deploy Tailwind CSS Static Site to Pages
+
+on:
+  push:
+    branches: ["main"]  # Change if your branch is different
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.11.1"  # Change this if needed
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Tailwind CSS
+        run: npx tailwindcss -i ./src/styles.css -o ./dist/output.css --minify
+
+      - name: Move Files to Dist
+        run: |
+          mkdir -p dist
+          cp src/index.html dist/
+          cp -r src/assets dist/  # Copy other static assets if needed
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "dist"  # Deploy only the built files
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
